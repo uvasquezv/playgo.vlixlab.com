@@ -259,6 +259,56 @@ footer{background:var(--dark);padding:36px 56px;display:flex;justify-content:spa
   font-weight: 600;
   margin-bottom: 2px;
 }
+
+@media(max-width:600px){
+  /* Floating social bar: move to bottom, smaller, don't overlap content */
+  .sf{bottom:16px;right:12px;gap:6px}
+  .sf a{width:36px;height:36px;border-radius:8px}
+  .sf svg{width:16px;height:16px}
+
+  /* Specs grid: wrap better on small screens */
+  .specs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:20px}
+  .spec{padding:8px 10px}
+  .spec-val{font-size:14px}
+  .spec-key{font-size:9px}
+
+  /* Price block: stack vertically on mobile */
+  .inflable-price{flex-direction:column;align-items:flex-start;gap:8px}
+  .price-promo{flex-wrap:wrap;gap:8px}
+  .price-main{font-size:34px}
+  .price-before{font-size:11px}
+  .price-label{font-size:0.7rem}
+
+  /* Inflable card info padding */
+  .inflable-info{padding:24px 16px}
+
+  /* Gallery thumbs smaller */
+  .gallery-thumbs .thumb{width:42px;height:32px}
+  .gallery-wrap{height:220px}
+
+  /* Nav: tighten on mobile */
+  nav{padding:12px 16px}
+  .nav-cta{font-size:12px;padding:8px 14px}
+
+  /* Hero section */
+  .hero{padding:90px 16px 48px}
+  .hero-title{font-size:clamp(32px,10vw,56px)}
+
+  /* Sections padding */
+  .sec,.paquetes-sec,.renta-sec,.incluye-sec,.contact-sec{padding:48px 16px}
+
+  /* Paquete cards */
+  .paquete-card{padding:24px 16px}
+
+  /* Stats */
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+
+  /* Incluye grid */
+  .incluye-grid{grid-template-columns:repeat(2,1fr)}
+
+  /* Section titles */
+  .sec-title{font-size:clamp(28px,8vw,44px)}
+}
 </style>
 </head>
 <body>
