@@ -317,7 +317,8 @@ footer{background:var(--dark);padding:36px 56px;display:flex;justify-content:spa
 .vlix-topbar{
   display:flex;align-items:center;justify-content:center;gap:16px;
   background:linear-gradient(90deg,#7C3AED,#C026D3);
-  padding:10px 20px;font-size:13px;color:#fff;position:relative;
+  padding:10px 20px;font-size:13px;color:#fff;
+  position:sticky;top:0;z-index:200;
   flex-wrap:wrap;text-align:center;
 }
 .vlix-topbar strong{color:#fff}
@@ -414,6 +415,13 @@ footer{background:var(--dark);padding:36px 56px;display:flex;justify-content:spa
   /* VlixLab section */
   .vlix-sec{padding:56px 16px}
   .vlix-cards{grid-template-columns:1fr;gap:12px}
+}
+
+@media(max-width:600px){
+  /* Hide geometric hero images on mobile - they cause blank space */
+  .hero-imgs{display:none !important}
+  /* Hero takes natural height on mobile */
+  .hero{height:auto !important;min-height:100svh;padding-top:100px !important}
 }
 </style>
 </head>
@@ -843,13 +851,16 @@ function sendPlayGO() {
   var nav = document.querySelector('nav');
   function updateNav(){
     if(bar && bar.style.display !== 'none'){
-      nav.style.top = bar.offsetHeight + 'px';
+      var h = bar.getBoundingClientRect().height;
+      nav.style.top = h + 'px';
     } else {
       nav.style.top = '0px';
     }
   }
   updateNav();
   window.addEventListener('resize', updateNav);
+  // Also update on scroll in case topbar scrolls away
+  window.addEventListener('scroll', updateNav);
 })();
 </script>
 </body>
