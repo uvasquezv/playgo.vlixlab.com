@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlayGO.vlix — Inflables Premium para Eventos Infantiles</title>
+<title>PlayGO - Inflables Premium para tu evento</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -344,6 +344,21 @@ footer{background:var(--dark);padding:36px 56px;display:flex;justify-content:spa
 .credit-btn{display:inline-flex;align-items:center;gap:6px;background:var(--grad-yellow);color:var(--black);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;padding:10px 22px;border-radius:8px;transition:transform 0.2s,box-shadow 0.2s}
 .credit-btn:hover{transform:translateY(-2px);box-shadow:0 0 28px rgba(255,193,7,0.35)}
 @media(max-width:768px){.credit{padding:0 16px 24px}.credit-inner{flex-direction:column;text-align:center;gap:12px;padding:20px 16px}}
+
+/* LIGHTBOX */
+.gallery-slides{cursor:zoom-in}
+.lb{position:fixed;inset:0;z-index:1000;background:rgba(5,5,8,0.94);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity 0.25s,visibility 0.25s}
+.lb.open{opacity:1;visibility:visible}
+.lb-img{max-width:92vw;max-height:86vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 80px rgba(0,0,0,0.6);user-select:none;-webkit-user-drag:none}
+.lb-close{position:absolute;top:18px;right:18px;width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,0.65);border:1px solid var(--border-yellow);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s,transform 0.2s;z-index:2}
+.lb-close:hover{background:rgba(255,193,7,0.2);border-color:var(--yellow);transform:scale(1.08)}
+.lb-close svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s,border-color 0.2s;z-index:2}
+.lb-prev{left:18px}.lb-next{right:18px}
+.lb-prev:hover,.lb-next:hover{background:rgba(255,193,7,0.2);border-color:var(--yellow)}
+.lb-prev svg,.lb-next svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.5}
+.lb-count{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.1);padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted2)}
+@media(max-width:768px){.lb-close{top:12px;right:12px;width:42px;height:42px}.lb-prev{left:8px}.lb-next{right:8px}.lb-prev,.lb-next{width:40px;height:40px}.lb-img{max-width:96vw}}
 </style>
 </head>
 <body>
@@ -651,6 +666,14 @@ footer{background:var(--dark);padding:36px 56px;display:flex;justify-content:spa
 </div>
 
 
+<div class="lb" id="lb" aria-hidden="true">
+  <div class="lb-close" id="lb-close" aria-label="Cerrar"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+  <div class="lb-prev" id="lb-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+  <img class="lb-img" id="lb-img" alt="">
+  <div class="lb-next" id="lb-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+  <div class="lb-count" id="lb-count"></div>
+</div>
+
 <div class="sf">
   <a href="https://wa.me/529531162814?text=Hola%2C%20quiero%20informes%20sobre%20inflables" target="_blank" class="sf-wa"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span class="sf-tip">WhatsApp</span></a>
   <a href="https://instagram.com/inflables.playgo" target="_blank" class="sf-ig"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg><span class="sf-tip">Instagram</span></a>
@@ -695,6 +718,47 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') nextSlide('mario');
   if (e.key === 'ArrowLeft') prevSlide('mario');
 });
+
+// ── LIGHTBOX ──
+(function(){
+  const lb = document.getElementById('lb'), img = document.getElementById('lb-img'), cnt = document.getElementById('lb-count');
+  let srcs = [], idx = 0;
+  function show(){ img.src = srcs[idx]; cnt.textContent = (idx+1) + ' / ' + srcs.length; }
+  function open(gallery){
+    const wrap = document.getElementById('gallery-' + gallery);
+    srcs = Array.from(wrap.querySelectorAll('.slide img')).map(i => i.src);
+    idx = state[gallery] || 0;
+    show();
+    lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+  }
+  function close(){
+    lb.classList.remove('open'); lb.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+  function step(d){ idx = (idx + d + srcs.length) % srcs.length; show(); }
+  document.querySelectorAll('.gallery-wrap').forEach(w => {
+    const s = w.querySelector('.gallery-slides');
+    if (s) s.addEventListener('click', () => open(w.id.replace('gallery-','')));
+  });
+  document.getElementById('lb-close').addEventListener('click', close);
+  document.getElementById('lb-prev').addEventListener('click', e => { e.stopPropagation(); step(-1); });
+  document.getElementById('lb-next').addEventListener('click', e => { e.stopPropagation(); step(1); });
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'ArrowLeft') step(-1);
+  });
+  let x0 = null;
+  lb.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, {passive:true});
+  lb.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+  });
+})();
 
 // ── FORM ──
 function sendPlayGO() {
